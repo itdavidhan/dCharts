@@ -12,7 +12,7 @@
   var
   _VERSION = '1.0.1',
   _COLOR = d3.scale.category10(),
-  _MARGIN = {top: 20, left: 20, right: 20, bottom: 20};
+  _MARGIN = {top: 30, left: 30, right: 30, bottom: 30};
 
   function Dcharts(selector) {
     return new Dcharts.prototype.init(selector);
@@ -21,7 +21,7 @@
   Dcharts.prototype = {
     version: _VERSION,
     constructor: Dcharts,
-    // 初始化SVG画布
+    // 初始化
     init: function(selector) {
       this.selector = d3.select(selector);
       this.selector_width = parseFloat(this.selector.style('width'));
@@ -151,7 +151,7 @@
           }
 
           function renderBars() {
-              var padding = 2; // <-A
+              var padding = 20; // <-A
 
               _bodyG.selectAll("rect.bar")
                       .data(_data)
@@ -168,6 +168,9 @@
                       })
                       .attr("y", function (d) {
                           return _y(d.y); // <-D
+                      })
+                      .style("fill", function() {
+                        return _COLOR;
                       })
                       .attr("height", function (d) {
                           return yStart() - _y(d.y);
