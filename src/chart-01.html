@@ -5,9 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>chart-01</title>
+  <style media="screen">
+    *{padding: 0; margin: 0;}
+    div{margin: 10px;}
+    .div1{width: 500px; height: 200px; border: 1px solid #DDD;}
+    .div2{width: 500px; height: 100px; border: 1px solid #DDD;}
+  </style>
+  <link rel="stylesheet" href="../css/d3.css">
+  <script type="text/javascript">
+    window.onload = function() {
+      var dc1 = Dcharts('.div1');
+      var dc2 = Dcharts('.div2');
+      var ops = {
+        type: 'bar',
+        data: [
+          {'x': '0', 'y': 1},
+          {'x': '1', 'y': 4},
+          {'x': '2', 'y': 10},
+          {'x': '3', 'y': 6},
+          {'x': '4', 'y': 3}
+        ],
+        color: 'yellow'
+      }
+      dc1.setOption(ops);
+      dc2.setOption(ops);
+    };
+  </script>
 </head>
 <body>
-  <script type="text/javascript" src="../node_modules/d3/build/d3.js"></script>
+  <div class="div1"></div>
+  <div class="div2"></div>
+
+
+
+  <script type="text/javascript" src="../node_modules/d3/d3.js"></script>
   <script type="text/javascript" src="../dcharts.js">
 
   </script>

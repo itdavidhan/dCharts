@@ -27,7 +27,7 @@
   "main": "index.js",
   "browserify": "dcharts.js",
   "devDependencies": {
-    "d3": "^4.7.0"
+    "d3": "^3.5.17"
   },
   "scripts": {
     "test": "vows; echo"
