@@ -24,9 +24,6 @@
     // 初始化
     init: function(selector) {
       this.selector = d3.select(selector);
-      this.selector_width = parseFloat(this.selector.style('width'));
-      this.selector_height = parseFloat(this.selector.style('height'));
-      console.log(this.selector_width, this.selector_height);
     },
     setOption: function(options) {
       // options 格式：
@@ -67,8 +64,8 @@
     },
     createBar: function(options) {
       var _selector = this.selector,
-          _w = this.selector_width,
-          _h = this.selector_height,
+          _w = parseFloat(_selector.style('width')),
+          _h = parseFloat(_selector.style('height')),
           _data_length = options.data.length;
 
       _selector.html('');
@@ -173,7 +170,6 @@
                           return yStart() - _y(d.y);
                       })
                       .attr("width", function(d){
-                          console.log(Math.floor(quadrantWidth() / _data.length) - padding);
                           return Math.floor(quadrantWidth() / _data.length) - padding;
                       });
           }

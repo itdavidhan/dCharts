@@ -49,6 +49,11 @@
       }
       dc1.setOption(ops);
       dc2.setOption(ops);
+
+      window.onresize = function() {
+        dc1.setOption(ops);
+        console.log(666);
+      };
     };
   </script>
 </head>
