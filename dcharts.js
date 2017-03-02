@@ -69,8 +69,9 @@
       var _selector = this.selector,
           _w = this.selector_width,
           _h = this.selector_height,
-
           _data_length = options.data.length;
+
+      _selector.html('');
 
       function barChart() {
           var _chart = {};
@@ -151,7 +152,7 @@
           }
 
           function renderBars() {
-              var padding = 20; // <-A
+              var padding = Math.floor(quadrantWidth() / _data.length)*0.2; // <-A
 
               _bodyG.selectAll("rect.bar")
                       .data(_data)
@@ -163,14 +164,10 @@
                       .data(_data)
                       .transition()
                       .attr("x", function (d) {
-                          console.log(_x(d.x));
                           return _x(d.x); // <-C
                       })
                       .attr("y", function (d) {
                           return _y(d.y); // <-D
-                      })
-                      .style("fill", function() {
-                        return _COLOR;
                       })
                       .attr("height", function (d) {
                           return yStart() - _y(d.y);
@@ -198,7 +195,6 @@
           }
 
           function quadrantWidth() {
-              console.log(_width - _margins.left - _margins.right);
               return _width - _margins.left - _margins.right;
           }
 
@@ -241,11 +237,6 @@
               _y = y;
               return _chart;
           };
-
-          // _chart.setSeries = function (series) {
-          //     _data = series;
-          //     return _chart;
-          // };
 
           return _chart;
       }
