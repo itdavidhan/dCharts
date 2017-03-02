@@ -1,0 +1,36 @@
+{
+  "name": "dcharts",
+  "version": "1.0.1",
+  "description": "一个基于D3.js的工具库.",
+  "keywords": [
+    "d3",
+    "w3c",
+    "visualization",
+    "svg",
+    "animation"
+  ],
+  "homepage": "https://github.com/itdavidhan/dCharts",
+  "author": {
+    "name": "itdavidhan",
+    "url": "https://davidhan.sinaapp.com"
+  },
+  "contributors": [
+    {
+      "name": "",
+      "url": ""
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "main": "index.js",
+  "browserify": "dcharts.js",
+  "devDependencies": {
+    "d3": "^4.7.0"
+  },
+  "scripts": {
+    "test": "vows; echo"
+  },
+  "license": "BSD-3-Clause"
+}
