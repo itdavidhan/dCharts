@@ -78,7 +78,7 @@
               _margins = options.margin || _MARGIN,
               _x, _y,
               _data = options.data,
-              _colors = options.color || _COLOR,
+              _colors = options.color,
               _svg,
               _bodyG;
 
@@ -149,22 +149,30 @@
           }
 
           function renderBars() {
-              var padding = Math.floor(quadrantWidth() / _data.length)*0.2; // <-A
+              var padding = Math.floor(quadrantWidth() / _data.length)*0.2;
 
               _bodyG.selectAll("rect.bar")
                       .data(_data)
                       .enter()
-                      .append("rect") // <-B
+                      .append("rect")
                       .attr("class", "bar");
 
               _bodyG.selectAll("rect.bar")
                       .data(_data)
                       .transition()
+                      .style("fill", function(d, i) {
+                        if(typeof options.color !== 'undefined' && options.color.length > 0)
+                        {
+                          return _colors[i];
+                        }else{
+                          return _COLOR(i);
+                        }  
+                      })
                       .attr("x", function (d) {
-                          return _x(d.x); // <-C
+                          return _x(d.x);
                       })
                       .attr("y", function (d) {
-                          return _y(d.y); // <-D
+                          return _y(d.y);
                       })
                       .attr("height", function (d) {
                           return yStart() - _y(d.y);

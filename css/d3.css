@@ -216,5 +216,5 @@ button {
 
 .bar{
     stroke: none;
-    fill: steelblue;
+    /*fill: steelblue;*/
 }
