@@ -216,5 +216,14 @@ button {
 
 .bar{
     stroke: none;
-    /*fill: steelblue;*/
+    fill: steelblue;
+}
+
+.tooltip{
+  position: absolute;
+  padding: 10px;
+  background-color: #000;
+  color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
 }

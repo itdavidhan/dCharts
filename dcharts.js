@@ -7,7 +7,6 @@
   }
 
   console.log(d3);
-  console.log(Dcharts);
 
   var
   _VERSION = '1.0.1',
@@ -33,7 +32,8 @@
       //   height: 100,
       //   margin: {top: 20, right: 20, bottom: 20, left: 20},
       //   color: ['red', 'green', 'blue'],
-      //   data: [1, 2, 3, 4, 5, 4, 3, 2, 1]
+      //   data: [1, 2, 3, 4, 5, 4, 3, 2, 1],
+      //   ticks: 5
       // }
       var _type = options.type;
       if(typeof _type == 'undefined')
@@ -66,9 +66,14 @@
       var _selector = this.selector,
           _w = parseFloat(_selector.style('width')),
           _h = parseFloat(_selector.style('height')),
-          _data_length = options.data.length;
+          _data_length = options.data.length,
+          _this = this;
 
       _selector.html('');
+      _selector.on('mouseleave', function(d) {
+        _this._hideTooltip(d, _selector);
+      });
+      _this._initTooltip(_selector);
 
       function barChart() {
           var _chart = {};
@@ -79,6 +84,7 @@
               _x, _y,
               _data = options.data,
               _colors = options.color,
+              _ticks = options.ticks,
               _svg,
               _bodyG;
 
@@ -92,7 +98,7 @@
                   defineBodyClip(_svg);
               }
 
-              renderBody(_svg);
+              renderBody(_svg, _selector);
           };
 
           function renderAxes(svg) {
@@ -105,7 +111,8 @@
 
               var yAxis = d3.svg.axis()
                       .scale(_y.range([quadrantHeight(), 0]))
-                      .orient("left");
+                      .orient("left")
+                      .ticks(_ticks);
 
               axesG.append("g")
                       .attr("class", "axis")
@@ -135,7 +142,7 @@
                       .attr("height", quadrantHeight());
           }
 
-          function renderBody(svg) {
+          function renderBody(svg, _selector) {
               if (!_bodyG)
                   _bodyG = svg.append("g")
                           .attr("class", "body")
@@ -145,13 +152,14 @@
                                   + yEnd() + ")")
                           .attr("clip-path", "url(#body-clip)");
 
-              renderBars();
+              renderBars(svg, _selector);
+
           }
 
-          function renderBars() {
+          function renderBars(svg, _selector) {
               var padding = Math.floor(quadrantWidth() / _data.length)*0.2;
-
-              _bodyG.selectAll("rect.bar")
+              var svg = svg;
+              var bar = _bodyG.selectAll("rect.bar")
                       .data(_data)
                       .enter()
                       .append("rect")
@@ -166,7 +174,7 @@
                           return _colors[i];
                         }else{
                           return _COLOR(i);
-                        }  
+                        }
                       })
                       .attr("x", function (d) {
                           return _x(d.x);
@@ -179,6 +187,38 @@
                       })
                       .attr("width", function(d){
                           return Math.floor(quadrantWidth() / _data.length) - padding;
+                      });
+
+              bar.on('mouseenter', function(d) {
+                _this._showTooltip(d, _selector);
+              })
+              .on('mousemove', function() {
+                var x = d3.event.pageX;
+                var y = d3.event.pageY;
+                _this._moveTooltip(_selector, x, y);
+              });
+              // .on('mouseleave', function(d) {
+              //   _this._hideTooltip(d, _selector);
+              // });
+
+              _bodyG.selectAll("text.text")
+                      .data(_data)
+                      .enter()
+                      .append("text")
+                      .attr("class", "text")
+                      .attr("x", function (d) {
+                          return _x(d.x)+(Math.floor(quadrantWidth() / _data.length) - padding)/2;
+                      })
+                      .attr("y", function (d) {
+                          return _y(d.y) + 16;
+                      })
+                      .style({
+                        "fill": "#FFF",
+                        "font-size": "12px"
+                      })
+                      .attr("text-anchor", "middle")
+                      .text(function(d) {
+                        return d.y;
                       });
           }
 
@@ -250,7 +290,35 @@
               .y(d3.scale.linear().domain([0, 12]));
 
       chart.render();
+    },
+    _showTooltip: function(d, _selector) {
+      var _tooltip = _selector.select('div.tooltip')
+                        .style('opacity', 0.8)
+                        .html(d.y);
+    },
+    _moveTooltip: function(_selector, x, y) {
+      var _tooltip = _selector.select('div.tooltip')
+                        .transition()
+                        .style('left', x + 'px')
+                        .style('top', y + 20 + 'px')
+    },
+    _hideTooltip: function(d, _selector) {
+      var _tooltip = _selector.select('div.tooltip')
+                        .transition()
+                        .style('opacity', 0)
+    },
+    _initTooltip: function(_selector) {
+      var _tooltip;
+      var _selector = _selector;
+
+      if(!_tooltip)
+      {
+        _tooltip = _selector.append('div')
+          .attr('class', 'tooltip')
+          .style('opacity', 0.0);
+      }
     }
+
   };
 
   Dcharts.prototype.init.prototype = Dcharts.prototype;
