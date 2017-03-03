@@ -136,23 +136,29 @@ button {
     font-weight: bold;
 }
 
-.axis path, .axis line {
+.x-axis path,
+.y-axis path,
+.x-axis line,
+.y-axis line {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
 }
 
-.axis text {
+.x-axis text,
+.y-axis text {
     font: 10px sans-serif;
 }
 
-.axis .grid-line{
+.x-axis .grid-line,
+.y-axis .grid-line{
     stroke: black;
     shape-rendering: crispEdges;
     stroke-opacity: .2;
 }
 
-.line{
+.x-axis .line,
+.y-axis .line{
     fill: none;
     stroke: steelblue;
     stroke-width: 2;

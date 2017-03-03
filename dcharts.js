@@ -12,6 +12,7 @@
   _VERSION = '1.0.1',
   _COLOR = d3.scale.category10(),
   _MARGIN = {top: 30, left: 30, right: 30, bottom: 30};
+  _SCROLLTOP = 0;
 
   function Dcharts(selector) {
     return new Dcharts.prototype.init(selector);
@@ -115,18 +116,34 @@
                       .ticks(_ticks);
 
               axesG.append("g")
-                      .attr("class", "axis")
+                      .attr("class", "x-axis")
                       .attr("transform", function () {
                           return "translate(" + xStart() + "," + yStart() + ")";
                       })
                       .call(xAxis);
 
               axesG.append("g")
-                      .attr("class", "axis")
+                      .attr("class", "y-axis")
                       .attr("transform", function () {
                           return "translate(" + xStart() + "," + yEnd() + ")";
                       })
                       .call(yAxis);
+
+              axesG.selectAll('g.x-axis g.tick')
+                   .append('line')
+                   .attr('class', 'grid-line')
+                   .attr('x1', 0)
+                   .attr('y1', 0)
+                   .attr('x2', 0)
+                   .attr('y2', - (_height - 2*_margins.top));
+
+             axesG.selectAll('g.y-axis g.tick')
+                  .append('line')
+                  .attr('class', 'grid-line')
+                  .attr('x1', 0)
+                  .attr('y1', 0)
+                  .attr('x2', quadrantWidth())
+                  .attr('y2', 0);
           }
 
           function defineBodyClip(svg) {
@@ -300,10 +317,11 @@
       main_height = parseFloat(_selector.style('height')),
       self_width = parseFloat(_tooltip.style('width')) + 30,
       self_height = parseFloat(_tooltip.style('height')) + 30,
-      x = (x >= (main_width/2)) ? x - self_width : x,
-      y = (y >= (main_height/2)) ? y - self_height : y;
+      // scrollTop = this._getScrollTop(),
+      x = (x >= main_width/2) ? x - self_width : x,
+      y = (y >= main_height/2) ? y - self_height : y;
 
-      _tooltip.style('left', x + 'px')
+      _tooltip.transition().style('left', x + 'px')
               .style('top', y + 10 + 'px');
     },
     _hideTooltip: function(d, _selector) {
@@ -321,6 +339,18 @@
           .attr('class', 'tooltip')
           .style('opacity', 0.0);
       }
+    },
+    _getScrollTop: function() {
+       var scrolltop = 0;
+       if(document.documentElement && document.documentElement.scrollTop)
+       {
+           scrollTop = document.documentElement.scrollTop;
+       }
+       else if(document.body)
+       {
+           scrollTop = document.body.scrollTop;
+       }
+       return scrollTop;
     }
 
   };
