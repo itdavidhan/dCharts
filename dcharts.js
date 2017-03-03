@@ -34,7 +34,9 @@
       //   margin: {top: 20, right: 20, bottom: 20, left: 20},
       //   color: ['red', 'green', 'blue'],
       //   data: [1, 2, 3, 4, 5, 4, 3, 2, 1],
-      //   ticks: 5
+      //   ticks: 5,
+      //   showLineX: true,
+      //   showLineY: false
       // }
       var _type = options.type;
       if(typeof _type == 'undefined')
@@ -68,6 +70,14 @@
           _w = parseFloat(_selector.style('width')),
           _h = parseFloat(_selector.style('height')),
           _data_length = options.data.length,
+          _data_max = (function() {
+            var data = options.data;
+            var arr = [];
+            data.forEach(function(key, value) {
+              arr.push(key.y);
+            });
+            return d3.max(arr);
+          })();
           _this = this;
 
       _selector.html('');
@@ -86,6 +96,8 @@
               _data = options.data,
               _colors = options.color,
               _ticks = options.ticks,
+              _showLineX = options.showLineX || false,
+              _showLineY = options.showLineY || false,
               _svg,
               _bodyG;
 
@@ -129,21 +141,27 @@
                       })
                       .call(yAxis);
 
-              axesG.selectAll('g.x-axis g.tick')
-                   .append('line')
-                   .attr('class', 'grid-line')
-                   .attr('x1', 0)
-                   .attr('y1', 0)
-                   .attr('x2', 0)
-                   .attr('y2', - (_height - 2*_margins.top));
+              if(_showLineX)
+              {
+                axesG.selectAll('g.x-axis g.tick')
+                     .append('line')
+                     .attr('class', 'grid-line')
+                     .attr('x1', 0)
+                     .attr('y1', 0)
+                     .attr('x2', 0)
+                     .attr('y2', - (_height - 2*_margins.top));
+              }
 
-             axesG.selectAll('g.y-axis g.tick')
-                  .append('line')
-                  .attr('class', 'grid-line')
-                  .attr('x1', 0)
-                  .attr('y1', 0)
-                  .attr('x2', quadrantWidth())
-                  .attr('y2', 0);
+              if(_showLineY)
+              {
+                axesG.selectAll('g.y-axis g.tick')
+                     .append('line')
+                     .attr('class', 'grid-line')
+                     .attr('x1', 0)
+                     .attr('y1', 0)
+                     .attr('x2', quadrantWidth())
+                     .attr('y2', 0);
+              }
           }
 
           function defineBodyClip(svg) {
@@ -301,7 +319,7 @@
 
       var chart = barChart()
               .x(d3.scale.linear().domain([0, _data_length+1]))
-              .y(d3.scale.linear().domain([0, 12]));
+              .y(d3.scale.linear().domain([0, _data_max]));
 
       chart.render();
     },
@@ -321,7 +339,9 @@
       x = (x >= main_width/2) ? x - self_width : x,
       y = (y >= main_height/2) ? y - self_height : y;
 
-      _tooltip.transition().style('left', x + 'px')
+      _tooltip.transition()
+              .ease('linear')
+              .style('left', x + 'px')
               .style('top', y + 10 + 'px');
     },
     _hideTooltip: function(d, _selector) {
