@@ -266,7 +266,7 @@
 
           bar.on('mouseenter', function(d) {
             _this._showTooltip(d, _selector);
-            d3.select(this).style('opacity', '0.8');
+            d3.select(this).transition().style('opacity', '0.8');
           })
           .on('mousemove', function() {
             var x = d3.event.pageX;
@@ -274,7 +274,7 @@
             _this._moveTooltip(_selector, x, y);
           })
           .on('mouseleave', function() {
-            d3.select(this).style('opacity', '1');
+            d3.select(this).transition().style('opacity', '1');
           });
 
           _bodyG.selectAll("text.text")

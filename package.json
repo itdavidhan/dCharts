@@ -21,7 +21,9 @@
   "main": "index.js",
   "browserify": "dcharts.js",
   "devDependencies": {
-    "d3": "^3.5.17"
+    "d3": "^3.5.17",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1"
   },
   "scripts": {
     "test": "vows; echo"
