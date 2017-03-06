@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>bar chart linear</title>
+  <title>bar chart time</title>
   <style media="screen">
     *{padding: 0; margin: 0;}
     div{margin: 10px;}
@@ -18,8 +18,15 @@
       var dc2 = Dcharts('.div2');
       var ops = {
         type: 'bar',
-        scale: 'linear',
-        data: [1, 4, 12, 22, 10, 3, 6, 6, 2],
+        scale: 'ordinal',
+        data: [
+          {key: '2016-1', value: 20},
+          {key: '2016-2', value: 30},
+          {key: '2016-3', value: 60},
+          {key: '2016-4', value: 140},
+          {key: '2016-5', value: 10},
+          {key: '2016-6', value: 50}
+        ],
         margin: {top: 20, right: 20, bottom: 20, left: 100},
         // ticks: 5,
         showLineX: false,

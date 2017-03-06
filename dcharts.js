@@ -37,7 +37,9 @@
       //   data: [1, 2, 3, 4, 5, 4, 3, 2, 1],
       //   ticks: 5,
       //   showLineX: true,
-      //   showLineY: false
+      //   showLineY: false,
+      //   formatX: '',
+      //   formatY: '$'
       // }
       var _type = options.type;
       if(typeof _type == 'undefined')
@@ -104,6 +106,8 @@
           _ticks = options.ticks,
           _showLineX = options.showLineX || false,
           _showLineY = options.showLineY || false,
+          _formatX = options.formatX || false,
+          _formatY = options.formatY || false,
           _svg,
           _bodyG,
           _this = this;
@@ -134,10 +138,24 @@
                   .scale(_x)
                   .orient("bottom");
 
+          if(_formatX)
+          {
+            xAxis.tickFormat(function(v) {
+              return v + _formatX;
+            });
+          }
+
           var yAxis = d3.svg.axis()
                   .scale(_y)
                   .orient("left")
                   .ticks(_ticks);
+
+          if(_formatY)
+          {
+            yAxis.tickFormat(function(v) {
+              return v + _formatY;
+            });
+          }
 
           axesG.append("g")
                   .attr("class", "x-axis")
@@ -152,6 +170,16 @@
                       return "translate(" + xStart() + "," + yEnd() + ")";
                   })
                   .call(yAxis);
+
+          // axesG.append("g")
+          //    .attr("class", "y axis")
+          //    .call(yAxis)
+          //    .append("text")
+          //    .attr("transform", "rotate(-90)")
+          //    .attr("y", 6)
+          //    .attr("dy", ".71em")
+          //    .style("text-anchor", "end")
+          //    .text("Frequency");
 
           if(_showLineX)
           {

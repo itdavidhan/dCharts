@@ -30,15 +30,17 @@
         margin: {top: 30, right: 30, bottom: 30, left: 30},
         ticks: 5,
         showLineX: true,
-        showLineY: true
+        showLineY: true,
+        formatX: '',
+        formatY: '$'
         // color: ['yellow', 'red', 'orange', 'blue', 'green']
       }
       dc1.setOption(ops);
-      dc2.setOption(ops);
+      dc2.createBar(ops);
 
       window.onresize = function() {
         dc1.setOption(ops);
-        dc2.setOption(ops);
+        dc2.createBar(ops);
       };
     };
   </script>
