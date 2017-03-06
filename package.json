@@ -10,15 +10,9 @@
     "animation"
   ],
   "homepage": "https://github.com/itdavidhan/dCharts",
-  "author": {
-    "name": "itdavidhan",
-    "url": "https://davidhan.sinaapp.com"
-  },
+  "author": "itdavidhan (https://davidhan.sinaapp.com)",
   "contributors": [
-    {
-      "name": "",
-      "url": ""
-    }
+    ""
   ],
   "repository": {
     "type": "git",

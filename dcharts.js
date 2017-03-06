@@ -48,8 +48,8 @@
       switch(options.type)
       {
         // 条形图（柱状图）
-        case 'bar':
-          this.createBar(options);
+        case 'bar-linear':
+          this.createBarLinear(options);
           break;
         // 饼图
         case 'pie':
@@ -65,26 +65,18 @@
           break;
       }
     },
-    createBar: function(options) {
+    createBarLinear: function(options) {
       var _selector = this.selector,
           _w = parseFloat(_selector.style('width')),
           _h = parseFloat(_selector.style('height')),
-          _data_length = options.data.length,
-          _data_max = (function() {
-            var data = options.data;
-            var arr = [];
-            data.forEach(function(key, value) {
-              arr.push(key.y);
-            });
-            return d3.max(arr);
-          })(),
-
+          _data = options.data,
+          _data_length = _data.length,
+          _data_max = d3.max(_data),
           _width = options.width || _w,
           _height = options.height || _h,
           _margins = options.margin || _MARGIN,
           _x = d3.scale.linear().domain([0, _data_length+1]).range([0, quadrantWidth()]),
           _y = d3.scale.linear().domain([0, _data_max]).range([quadrantHeight(), 0]),
-          _data = options.data,
           _colors = options.color,
           _ticks = options.ticks,
           _showLineX = options.showLineX || false,
@@ -205,14 +197,14 @@
                       return _COLOR(i);
                     }
                   })
-                  .attr("x", function (d) {
-                      return _x(d.x);
+                  .attr("x", function (d, i) {
+                      return _x(i+1) - (Math.floor(quadrantWidth() / _data.length) - padding)/2;
                   })
                   .attr("y", function (d) {
-                      return _y(d.y);
+                      return _y(d);
                   })
                   .attr("height", function (d) {
-                      return yStart() - _y(d.y);
+                      return yStart() - _y(d);
                   })
                   .attr("width", function(d){
                       return Math.floor(quadrantWidth() / _data.length) - padding;
@@ -236,11 +228,11 @@
                   .enter()
                   .append("text")
                   .attr("class", "text")
-                  .attr("x", function (d) {
-                      return _x(d.x)+(Math.floor(quadrantWidth() / _data.length) - padding)/2;
+                  .attr("x", function (d, i) {
+                      return _x(i+1);
                   })
                   .attr("y", function (d) {
-                      return _y(d.y) + 16; // 16:距离柱形图顶部的距离，根据情况而定
+                      return _y(d) + 16; // 16:距离柱形图顶部的距离，根据情况而定
                   })
                   .style({
                     "fill": "#FFF",
@@ -248,7 +240,7 @@
                   })
                   .attr("text-anchor", "middle")
                   .text(function(d) {
-                    return d.y;
+                    return d;
                   });
       }
       function xStart() {
@@ -273,7 +265,7 @@
     _showTooltip: function(d, _selector) {
       var _tooltip = _selector.select('div.tooltip')
                         .style('opacity', 0.8)
-                        .html(d.y);
+                        .html(d);
     },
     _moveTooltip: function(_selector, x, y) {
       var
