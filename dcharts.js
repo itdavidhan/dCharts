@@ -29,6 +29,7 @@
       // options 格式：
       // {
       //   type: 'bar', // bar, pie, line, area
+      //   scale: 'linear', // linear, ordinal, time
       //   width: 100,
       //   height: 100,
       //   margin: {top: 20, right: 20, bottom: 20, left: 20},
@@ -48,8 +49,8 @@
       switch(options.type)
       {
         // 条形图（柱状图）
-        case 'bar-linear':
-          this.createBarLinear(options);
+        case 'bar':
+          this.createBar(options);
           break;
         // 饼图
         case 'pie':
@@ -65,17 +66,39 @@
           break;
       }
     },
-    createBarLinear: function(options) {
+    createBar: function(options) {
       var _selector = this.selector,
           _w = parseFloat(_selector.style('width')),
           _h = parseFloat(_selector.style('height')),
           _data = options.data,
+          _scale = options.scale,
           _data_length = _data.length,
-          _data_max = d3.max(_data),
+          _data_max = (function() {
+            if(_scale == 'linear')
+            {
+              return d3.max(_data);
+            }
+            else if(_scale == 'ordinal')
+            {
+              return d3.max(_data, function(d) {
+                return d.value;
+              });
+            }
+          })(),
           _width = options.width || _w,
           _height = options.height || _h,
           _margins = options.margin || _MARGIN,
-          _x = d3.scale.linear().domain([0, _data_length+1]).range([0, quadrantWidth()]),
+          _x = (function() {
+            if(_scale == 'linear')
+            {
+              return d3.scale.linear().domain([0, _data_length+1]).range([0, quadrantWidth()]);
+            }
+            else if(_scale == 'ordinal') {
+              return d3.scale.ordinal().domain(_data.map(function(d) {
+                return d.key;
+              })).rangePoints([0, _width - _margins.left*2], 1);
+            }
+          })(),
           _y = d3.scale.linear().domain([0, _data_max]).range([quadrantHeight(), 0]),
           _colors = options.color,
           _ticks = options.ticks,
@@ -138,7 +161,7 @@
                  .attr('x1', 0)
                  .attr('y1', 0)
                  .attr('x2', 0)
-                 .attr('y2', - (_height - 2*_margins.top));
+                 .attr('y2', - (_height - 2*_margins.bottom));
           }
 
           if(_showLineY)
@@ -198,13 +221,16 @@
                     }
                   })
                   .attr("x", function (d, i) {
-                      return _x(i+1) - (Math.floor(quadrantWidth() / _data.length) - padding)/2;
+                      var _resultX = d.key ? d.key : i+1;
+                      return _x(_resultX) - (Math.floor(quadrantWidth() / _data.length) - padding)/2;
                   })
                   .attr("y", function (d) {
-                      return _y(d);
+                      var _resultY = d.value ? d.value : d;
+                      return _y(_resultY);
                   })
                   .attr("height", function (d) {
-                      return yStart() - _y(d);
+                      var _result = d.value ? d.value : d;
+                      return yStart() - _y(_result);
                   })
                   .attr("width", function(d){
                       return Math.floor(quadrantWidth() / _data.length) - padding;
@@ -229,10 +255,12 @@
                   .append("text")
                   .attr("class", "text")
                   .attr("x", function (d, i) {
-                      return _x(i+1);
+                      var _resultX = d.key ? d.key : i+1;
+                      return _x(_resultX);
                   })
                   .attr("y", function (d) {
-                      return _y(d) + 16; // 16:距离柱形图顶部的距离，根据情况而定
+                      var _resultY = d.value ? d.value : d;
+                      return _y(_resultY) + 16; // 16:距离柱形图顶部的距离，根据情况而定
                   })
                   .style({
                     "fill": "#FFF",
@@ -240,7 +268,7 @@
                   })
                   .attr("text-anchor", "middle")
                   .text(function(d) {
-                    return d;
+                    return d.value ? d.value : d;
                   });
       }
       function xStart() {
@@ -263,9 +291,10 @@
       }
     },
     _showTooltip: function(d, _selector) {
+      var _result = d.value ? d.value : d;
       var _tooltip = _selector.select('div.tooltip')
                         .style('opacity', 0.8)
-                        .html(d);
+                        .html(_result);
     },
     _moveTooltip: function(_selector, x, y) {
       var
