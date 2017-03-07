@@ -17,21 +17,21 @@
       var dc1 = Dcharts('.div1');
       var dc2 = Dcharts('.div2');
       var ops = {
-        type: 'bar',
-        scale: 'linear',
-        data: [1, 4, 12, 22, 10, 3, 6, 6, 2],
-        margin: {top: 20, right: 20, bottom: 20, left: 100},
-        // ticks: 5,
-        showLineX: false,
-        showLineY: true
-        // color: ['yellow', 'red', 'orange', 'blue', 'green']
+        data: [
+          {'key': '美国', 'value': 20000},
+          {'key': '中国', 'value': 10000},
+          {'key': '俄罗斯', 'value': 3000},
+          {'key': '日本', 'value': 6000},
+          {'key': '韩国', 'value': 5000},
+          {'key': '朝鲜', 'value': 1000}
+        ]
       }
-      dc1.createBarChart(ops);
-      dc2.createBarChart(ops);
+      dc1.createPieChart(ops);
+      dc2.createPieChart(ops);
 
       window.onresize = function() {
-        dc1.createBarChart(ops);
-        dc2.createBarChart(ops);
+        dc1.createPieChart(ops);
+        dc2.createPieChart(ops);
       };
     };
   </script>
