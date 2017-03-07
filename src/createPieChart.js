@@ -43,7 +43,6 @@ Dcharts.prototype.createPieChart = function(options) {
       if (!_bodyG)
           _bodyG = svg.append("g")
                   .attr("class", "body");
-
       renderPie();
   }
 
