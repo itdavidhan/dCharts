@@ -10,12 +10,19 @@ Dcharts.prototype.createPieChart = function(options) {
       _bodyG,
       _pieG,
       _radius = 200,
-      _innerRadius = 100;
+      _innerRadius = 100
+      _this = this;
+
+  _selector.html('');
+  _selector.on('mouseleave', function(d) {
+    _this.tooltip._hideTooltip(d, _selector);
+  });
+  _this.tooltip._initTooltip(_selector);
 
   render();
   function render() {
       if (!_svg) {
-          _svg = d3.select("body").append("svg")
+          _svg = _selector.append("svg")
                   .attr("height", _height)
                   .attr("width", _width);
       }
@@ -85,6 +92,19 @@ Dcharts.prototype.createPieChart = function(options) {
                       return arc(interpolate(t));
                   };
               });
+
+      slices.on('mouseenter', function(d) {
+        _this.tooltip._showTooltip(d, _selector);
+        d3.select(this).transition().style('opacity', '0.8');
+      })
+      .on('mousemove', function() {
+        var x = d3.event.pageX;
+        var y = d3.event.pageY;
+        _this.tooltip._moveTooltip(_selector, x, y);
+      })
+      .on('mouseleave', function() {
+        d3.select(this).transition().style('opacity', '1');
+      });
   }
 
   function renderLabels(pie, arc) {
