@@ -8,12 +8,13 @@ gulp.task('default', function() {
 // 合并dcharts.js: gulp dcct
 gulp.task('dcct', function() {
   gulp.src([
-    './src/start.js',
+    './src/start.js', // NOTE: keep this first
     './src/init.js',
     './src/createBarChart.js',
     './src/createPieChart.js',
+    './src/createLineChart.js',
     './src/tooltip.js',
-    './src/end.js'
+    './src/end.js' // NOTE: keep this last
   ])
   .pipe(concat('dcharts.js'))
   .pipe(gulp.dest('./lib'));

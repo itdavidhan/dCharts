@@ -158,15 +158,18 @@ button {
 }
 
 .x-axis .line,
-.y-axis .line{
+.y-axis .line,
+.line{
     fill: none;
     stroke: steelblue;
     stroke-width: 2;
 }
 
 .dot {
-  fill: #fff;
-  stroke: steelblue;
+  fill: steelblue;
+  /*stroke: green;*/
+  /*stroke-opacity: 1;*/
+  r: 4.5;
 }
 
 .area {

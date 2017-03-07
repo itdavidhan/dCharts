@@ -1,4 +1,7 @@
-
+/*
+* 创建柱状图 - bar chart
+*
+*/
 Dcharts.prototype.createBarChart = function(options) {
   var _selector = this.selector,
       _w = parseFloat(_selector.style('width')),

@@ -1,7 +1,7 @@
 
 Dcharts.prototype.tooltip = {
   _showTooltip: function(d, _selector) {
-    var _result = d.value ? d.value : d;
+    var _result = d.value || (d.value == 0) ? d.value : d;
     var _tooltip = _selector.select('div.tooltip')
                       .style('opacity', 0.8)
                       .html(_result);
@@ -14,7 +14,7 @@ Dcharts.prototype.tooltip = {
     self_width = parseFloat(_tooltip.style('width')) + 30,
     self_height = parseFloat(_tooltip.style('height')) + 30,
     // scrollTop = this._getScrollTop(),
-    x = (x >= main_width/2) ? x - self_width : x,
+    x = (x >= main_width/2) ? x - self_width - 20 : x + 20,
     y = (y >= main_height/2) ? y - self_height : y;
 
     _tooltip.transition()

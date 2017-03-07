@@ -5,6 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>line chart</title>
+  <style media="screen">
+    *{padding: 0; margin: 0;}
+    div{margin: 10px;}
+    .div1{width: 80%; height: 500px; border: 1px solid #DDD;}
+    .div2{width: 50%; height: 300px; border: 1px solid #DDD;}
+  </style>
+  <link rel="stylesheet" href="../../css/d3.css">
+  <script type="text/javascript">
+    window.onload = function() {
+      var dc1 = Dcharts('.div1');
+      var dc2 = Dcharts('.div2');
+      var ops = {
+        // type: 'bar',
+        // scale: 'linear',
+        data: [
+          [
+            {key: 0, value: 0},
+            {key: 1, value: 12},
+            {key: 2, value: 4},
+            {key: 3, value: 22},
+            {key: 4, value: 6}
+          ],
+          [
+            {key: 0, value: 0},
+            {key: 1, value: 3},
+            {key: 2, value: 55},
+            {key: 3, value: 16},
+            {key: 4, value: 8}
+          ],
+          [
+            {key: 0, value: 2},
+            {key: 1, value: 13},
+            {key: 2, value: 30},
+            {key: 3, value: 20},
+            {key: 4, value: 10},
+            {key: 5, value: 2},
+            {key: 6, value: 2},
+            {key: 7, value: 2},
+            {key: 8, value: 2},
+            {key: 9, value: 2},
+            {key: 10, value: 2},
+            {key: 11, value: 2},
+            {key: 12, value: 2},
+            {key: 13, value: 2}
+          ],
+        ],
+        margin: {top: 20, right: 20, bottom: 20, left: 100},
+        // ticks: '5',
+        showLineX: false,
+        showLineY: true
+        // color: ['yellow', 'red', 'orange', 'blue', 'green']
+      }
+      dc1.createLineChart(ops);
+      // dc2.createLineChart(ops);
+
+      // window.onresize = function() {
+      //   dc1.createLineChart(ops);
+      //   // dc2.createLineChart(ops);
+      // };
+    };
+  </script>
 </head>
 <body>
   <div class="div1"></div>

@@ -1,3 +1,7 @@
+/*
+* 创建饼图 - pie chart
+*
+*/
 Dcharts.prototype.createPieChart = function(options) {
   var _selector = this.selector,
       _w = parseFloat(_selector.style('width')),
