@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>bar chart linear</title>
+  <style media="screen">
+    *{padding: 0; margin: 0;}
+    div{margin: 10px;}
+    .div1{width: 80%; height: 500px; border: 1px solid #DDD;}
+    .div2{width: 50%; height: 300px; border: 1px solid #DDD;}
+  </style>
+  <link rel="stylesheet" href="../../css/d3.css">
+  <script type="text/javascript">
+    window.onload = function() {
+      var dc1 = Dcharts('.div1');
+      var dc2 = Dcharts('.div2');
+      var ops = {
+        type: 'bar',
+        scale: 'linear',
+        data: [1, 4, 12, 22, 10, 3, 6, 6, 2],
+        margin: {top: 20, right: 20, bottom: 20, left: 100},
+        // ticks: 5,
+        showLineX: false,
+        showLineY: true
+        // color: ['yellow', 'red', 'orange', 'blue', 'green']
+      }
+      dc1.createBarChart(ops);
+      dc2.createBarChart(ops);
+
+      window.onresize = function() {
+        dc1.createBarChart(ops);
+        dc2.createBarChart(ops);
+      };
+    };
+  </script>
+</head>
+<body>
+  <div class="div1"></div>
+  <div class="div2"></div>
+
+
+
+  <script type="text/javascript" src="../../node_modules/d3/d3.js"></script>
+  <script type="text/javascript" src="../../lib/dcharts.js">
+
+  </script>
+</body>
+</html>
