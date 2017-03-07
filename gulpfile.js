@@ -5,8 +5,15 @@ gulp.task('default', function() {
   // 将你的默认的任务代码放在这
 });
 
-gulp.task('test', function() {
-  gulp.src(['./test/a.js','./test/b.js'])
-  .pipe(concat('main.js'))
+// 合并dcharts.js: gulp dcct
+gulp.task('dcct', function() {
+  gulp.src([
+    './src/start.js',
+    './src/init.js',
+    './src/createBarChart.js',
+    './src/tooltip.js',
+    './src/end.js'
+  ])
+  .pipe(concat('dcharts.js'))
   .pipe(gulp.dest('./lib'));
 });

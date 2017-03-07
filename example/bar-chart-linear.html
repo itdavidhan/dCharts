@@ -26,12 +26,12 @@
         showLineY: true
         // color: ['yellow', 'red', 'orange', 'blue', 'green']
       }
-      dc1.setOption(ops);
-      dc2.setOption(ops);
+      dc1.createBarChart(ops);
+      dc2.createBarChart(ops);
 
       window.onresize = function() {
-        dc1.setOption(ops);
-        dc2.setOption(ops);
+        dc1.createBarChart(ops);
+        dc2.createBarChart(ops);
       };
     };
   </script>
@@ -43,7 +43,7 @@
 
 
   <script type="text/javascript" src="../node_modules/d3/d3.js"></script>
-  <script type="text/javascript" src="../dcharts.js">
+  <script type="text/javascript" src="../lib/dcharts.js">
 
   </script>
 </body>
