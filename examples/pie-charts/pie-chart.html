@@ -8,7 +8,7 @@
   <style media="screen">
     *{padding: 0; margin: 0;}
     div{margin: 10px;}
-    .div1{width: 500px; height: 500px; border: 1px solid #DDD;}
+    .div1{width: 30%; height: 500px; border: 1px solid #DDD;}
     .div2{width: 300px; height: 300px; border: 1px solid #DDD;}
   </style>
   <link rel="stylesheet" href="../../css/d3.css">
@@ -16,11 +16,13 @@
     window.onload = function() {
       var dc1 = Dcharts('.div1');
       var dc2 = Dcharts('.div2');
-      var ops = {
+      var ops1 = {
         // width: 200,
         // height: 200,
         // radius: 100,
-        innerRadius: 50,
+        // innerRadius: 50,
+        padAngle: 0.01, // range: 0.01-0.03
+        title: '各国老鼠的数量',
         data: [
           {'key': '美国', 'value': 20000},
           {'key': '中国', 'value': 10000},
@@ -28,14 +30,25 @@
           {'key': '日本', 'value': 6000},
           {'key': '韩国', 'value': 5000},
           {'key': '朝鲜', 'value': 200}
+        ],
+        color: ['#000079', '#CE0000', '#2828FF', '#4B0091', '#FF0080', '#F9F900']
+      };
+      var ops2 = {
+        data: [
+          {'key': '美国', 'value': 20000},
+          {'key': '中国', 'value': 10000},
+          {'key': '俄罗斯', 'value': 3000},
+          {'key': '日本', 'value': 6000},
+          {'key': '韩国', 'value': 5000},
+          {'key': '朝鲜', 'value': 2050}
         ]
-      }
-      dc1.createPieChart(ops);
-      dc2.createPieChart(ops);
+      };
+      dc1.createPieChart(ops1);
+      dc2.createPieChart(ops2);
 
       window.onresize = function() {
-        dc1.createPieChart(ops);
-        dc2.createPieChart(ops);
+        dc1.createPieChart(ops1);
+        dc2.createPieChart(ops2);
       };
     };
   </script>
