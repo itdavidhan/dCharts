@@ -11,6 +11,7 @@ gulp.task('dcct', function() {
     './src/start.js',
     './src/init.js',
     './src/createBarChart.js',
+    './src/createPieChart.js',
     './src/tooltip.js',
     './src/end.js'
   ])
