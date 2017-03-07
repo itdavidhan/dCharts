@@ -9,8 +9,8 @@ Dcharts.prototype.createPieChart = function(options) {
       _svg,
       _bodyG,
       _pieG,
-      _radius = 200,
-      _innerRadius = 100
+      _radius = options.radius || _width/2,
+      _innerRadius = options.innerRadius || _radius/2,
       _this = this;
 
   _selector.html('');
