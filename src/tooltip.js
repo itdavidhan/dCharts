@@ -1,7 +1,16 @@
 
 Dcharts.prototype.tooltip = {
   _showTooltip: function(d, _selector) {
-    var _result = d.value || (d.value == 0) ? d.value : d;
+    console.log(d, d instanceof Array );
+    var _result = (function() {
+      if(d instanceof Array){
+        return d[1];
+      }else if(d instanceof Object) {
+        return d.data[1];
+      }else{
+        return d;
+      }
+    })();
     var _tooltip = _selector.select('div.tooltip')
                       .style('opacity', 0.8)
                       .html(_result);

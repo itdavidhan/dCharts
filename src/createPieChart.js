@@ -4,9 +4,10 @@
 */
 Dcharts.prototype.createPieChart = function(options) {
   var _selector = this.selector,
+      _this = this,
       _w = parseFloat(_selector.style('width')),
       _h = parseFloat(_selector.style('height')),
-      _data = options.data,
+      _data = _this.util._json2arr(options.data),
       _width = options.width || _w,
       _height = options.height || _h,
       _padAngle = options.padAngle || 0, //0.01-0.03
@@ -16,8 +17,7 @@ Dcharts.prototype.createPieChart = function(options) {
       _bodyG,
       _pieG,
       _radius = options.radius || _width/2,
-      _innerRadius = options.innerRadius || _radius/2,
-      _this = this;
+      _innerRadius = options.innerRadius || _radius/2;
 
   _selector.html('');
   _selector.on('mouseleave', function(d) {
@@ -53,10 +53,10 @@ Dcharts.prototype.createPieChart = function(options) {
   function renderPie() {
       var pie = d3.layout.pie()
               .sort(function (d) {
-                  return d.key;
+                  return d[0];
               })
               .value(function (d) {
-                  return d.value;
+                  return d[1];
               });
 
       var arc = d3.svg.arc()
@@ -140,7 +140,7 @@ Dcharts.prototype.createPieChart = function(options) {
               .attr("dy", ".35em")
               .attr("text-anchor", "middle")
               .text(function (d) {
-                  return d.data.key;
+                  return d.data[0];
               });
   }
 };

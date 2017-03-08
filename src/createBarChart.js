@@ -13,21 +13,26 @@
 */
 Dcharts.prototype.createBarChart = function(options) {
   var _selector = this.selector,
+      _this = this,
       _w = parseFloat(_selector.style('width')),
       _h = parseFloat(_selector.style('height')),
-      _data = options.data,
       _scale = options.scale,
+      _data = (function() {
+        if(_scale == 'linear') {
+          return options.data;
+        }else{
+          return _this.util._json2arr(options.data);
+        }
+      })(),
       _data_length = _data.length,
-      _data_max = (function() {
+      _val_max = (function() {
         if(_scale == 'linear')
         {
-          return d3.max(_data);
+          return d3.max(options.data);
         }
         else if(_scale == 'ordinal')
         {
-          return d3.max(_data, function(d) {
-            return d.value;
-          });
+          return _this.util._maxInArrs(_data)[1];
         }
       })(),
       _width = options.width || _w,
@@ -40,11 +45,11 @@ Dcharts.prototype.createBarChart = function(options) {
         }
         else if(_scale == 'ordinal') {
           return d3.scale.ordinal().domain(_data.map(function(d) {
-            return d.key;
+            return d[0];
           })).rangePoints([0, _width - _margins.left*2], 1);
         }
       })(),
-      _y = d3.scale.linear().domain([0, _data_max]).range([quadrantHeight(), 0]),
+      _y = d3.scale.linear().domain([0, _val_max]).range([quadrantHeight(), 0]),
       _colors = options.color,
       _ticks = options.ticks,
       _showLineX = options.showLineX || false,
@@ -52,8 +57,7 @@ Dcharts.prototype.createBarChart = function(options) {
       _formatX = options.formatX || false,
       _formatY = options.formatY || false,
       _svg,
-      _bodyG,
-      _this = this;
+      _bodyG;
 
   _selector.html('');
   _selector.on('mouseleave', function(d) {
@@ -192,15 +196,16 @@ Dcharts.prototype.createBarChart = function(options) {
                 }
               })
               .attr("x", function (d, i) {
-                  var _resultX = d.key ? d.key : i+1;
+                  console.log(d, d instanceof Array);
+                  var _resultX = d instanceof Array ? d[0] : i+1;
                   return _x(_resultX) - (Math.floor(quadrantWidth() / _data.length) - padding)/2;
               })
               .attr("y", function (d) {
-                  var _resultY = d.value ? d.value : d;
+                  var _resultY = d instanceof Array ? d[1] : d;
                   return _y(_resultY);
               })
               .attr("height", function (d) {
-                  var _result = d.value ? d.value : d;
+                  var _result = d instanceof Array ? d[1] : d;
                   return yStart() - _y(_result);
               })
               .attr("width", function(d){
@@ -226,11 +231,11 @@ Dcharts.prototype.createBarChart = function(options) {
               .append("text")
               .attr("class", "text")
               .attr("x", function (d, i) {
-                  var _resultX = d.key ? d.key : i+1;
+                  var _resultX = d instanceof Array ? d[0] : i+1;
                   return _x(_resultX);
               })
               .attr("y", function (d) {
-                  var _resultY = d.value ? d.value : d;
+                  var _resultY = d instanceof Array ? d[1] : d;
                   return _y(_resultY) + 16; // 16:距离柱形图顶部的距离，根据情况而定
               })
               .style({
@@ -239,7 +244,7 @@ Dcharts.prototype.createBarChart = function(options) {
               })
               .attr("text-anchor", "middle")
               .text(function(d) {
-                return d.value ? d.value : d;
+                return d instanceof Array ? d[1] : d;
               });
   }
   function xStart() {

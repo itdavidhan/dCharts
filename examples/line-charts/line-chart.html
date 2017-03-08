@@ -39,7 +39,7 @@
             {key: 2, value: 30},
             {key: 3, value: 20},
             {key: 4, value: 10}
-          ],
+          ]
         ],
         margin: {top: 20, right: 20, bottom: 20, left: 100},
         ticks: 5,
@@ -53,18 +53,18 @@
         // scale: 'linear',
         data: [
           [
-            {key: 'a', value: 0},
-            {key: 'b', value: 12},
-            {key: 'c', value: 4},
-            {key: 'd', value: 22},
-            {key: 'e', value: 6}
+            {a: '2', b: 115},
+            {a: '3', b: 112},
+            {a: '4', b: 114},
+            {a: '5', b: 212},
+            {a: '6', b: 116}
           ],
           [
-            {key: 'a', value: 12},
-            {key: 'b', value: 132},
-            {key: 'c', value: 24},
-            {key: 'd', value: 32},
-            {key: 'e', value: 16}
+            {a: '3', b: 121},
+            {a: '4', b: 132},
+            {a: '5', b: 214},
+            {a: '6', b: 312},
+            {a: '7', b: 116}
           ]
 
         ],
@@ -77,11 +77,11 @@
         // color: ['yellow', 'red', 'orange', 'blue', 'green']
       };
       dc1.createLineChart(ops1);
-      // dc2.createLineChart(ops2);
+      dc2.createLineChart(ops2);
 
       window.onresize = function() {
         dc1.createLineChart(ops1);
-        // dc2.createLineChart(ops2);
+        dc2.createLineChart(ops2);
       };
     };
   </script>

@@ -16,36 +16,49 @@
 
 Dcharts.prototype.createLineChart = function(options) {
   var _selector = this.selector,
+      _this = this,
       _w = parseFloat(_selector.style('width')),
       _h = parseFloat(_selector.style('height')),
       _scale = options.scale,
-      _data = options.data,
-      _data_max = (function() {
+      _data = (function() {
+        var data = [];
+        options.data.map(function(a) {
+          _a = _this.util._json2arr(a);
+          data.push(_a);
+        });
+        return data;
+      })(),
+      _val_max = (function() {
         var _max = -10000;
         d3.map(_data, function(d) {
-          d3.map(d, function(json) {
-            if(json.value > _max) _max = json.value;
-          });
+          var d_max = _this.util._maxInArrs(d)[1];
+          if(d_max > _max) _max = d_max;
+        });
+        return _max;
+      })(),
+      _val_min = (function() {
+        var _min = 10000;
+        d3.map(_data, function(d) {
+          var d_min = _this.util._minInArrs(d)[1];
+          if(d_min < _min) _min = d_min;
+        });
+        return _min;
+      })(),
+      _key_max = (function() {
+        var _max = -10000;
+        d3.map(_data, function(d) {
+          var d_max = _this.util._maxInArrs(d)[0];
+          if(d_max > _max) _max = d_max;
         });
         return _max;
       })(),
       _key_min = (function() {
         var _min = 1000000000;
         d3.map(_data, function(d) {
-          d3.map(d, function(json) {
-            if(json.key < _min) _min = json.key;
-          });
+          var d_min = _this.util._minInArrs(d)[0];
+          if(d_min < _min) _min = d_min;
         });
         return _min;
-      })(),
-      _key_max = (function() {
-        var _max = -1000000000;
-        d3.map(_data, function(d) {
-          d3.map(d, function(json) {
-            if(json.key > _max) _max = json.key;
-          });
-        });
-        return _max;
       })(),
       _data_length = (function() {
         var _len = 0;
@@ -58,9 +71,9 @@ Dcharts.prototype.createLineChart = function(options) {
       _height = options.height || _h,
       _margins = options.margin || _MARGIN,
       // _x = d3.scale.linear().domain([0, _data_length]),
-      // _x = d3.scale.linear().domain([_key_min, _key_max]),
-      _x = d3.time.scale().domain([new Date(2000, 0, 1).getTime(), new Date(2022, 0, 1).getTime()]),
-      _y = d3.scale.linear().domain([0, _data_max + 10]),
+      _x = d3.scale.linear().domain([_key_min, _key_max]),
+      // _x = d3.time.scale().domain([new Date(2000, 0, 1).getTime(), new Date(2022, 0, 1).getTime()]),
+      _y = d3.scale.linear().domain([_val_min, _val_max + 10]),
       _ticks = options.ticks,
       _interpolate = options.interpolate || 'cardinal',
       _tension = options.tension || 0.7,
@@ -70,9 +83,7 @@ Dcharts.prototype.createLineChart = function(options) {
       _color = options.color,
       _svg,
       _bodyG,
-      _line,
-      _this = this;
-      console.log(new Date(2000, 0, 1).getTime());
+      _line;
 
   _selector.html('');
   _selector.on('mouseleave', function(d) {
@@ -183,8 +194,8 @@ Dcharts.prototype.createLineChart = function(options) {
 
   function renderLines() {
       _line = d3.svg.line()
-                      .x(function (d) { return _x(d.key); })
-                      .y(function (d) { return _y(d.value); });
+                      .x(function (d) { return _x(d[0]); })
+                      .y(function (d) { return _y(d[1]); });
 
       if(_interpolate) _line.interpolate(_interpolate);
       if(_tension) _line.tension(_tension);
@@ -236,8 +247,8 @@ Dcharts.prototype.createLineChart = function(options) {
                       }
                   })
                   .transition()
-                  .attr("cx", function (d) { return _x(d.key); })
-                  .attr("cy", function (d) { return _y(d.value); })
+                  .attr("cx", function (d) { return _x(d[0]); })
+                  .attr("cy", function (d) { return _y(d[1]); })
                   .attr("r", 4.5);
 
           dots.on('mouseenter', function(d) {
