@@ -22,6 +22,7 @@ Dcharts.prototype.flicker = {
   },
   _flicke: function(dom) {
     d3.select(dom).transition()
+      .ease("linear")
       .duration(600)
       .style({
         'fill-opacity': 0,

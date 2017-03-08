@@ -2,7 +2,7 @@
 * 创建线图 - line chart
 * @param: {Object} options
 * 参数配置（带★为必选）
-* ★ scale: <string> example: 'linear' or 'ordinal'
+* ★ scale: <string> example: 'linear' or 'time'
 * ★ data: <array> example: [1, 4, 12] or [{'key': 'a', 'value': 1}, {'key': 'b', 'value': 2}]
 * margin: <json> example: {top: 20, right: 20, bottom: 20, left: 20}
 * ticks: <number> example: 5
@@ -18,12 +18,31 @@ Dcharts.prototype.createLineChart = function(options) {
   var _selector = this.selector,
       _w = parseFloat(_selector.style('width')),
       _h = parseFloat(_selector.style('height')),
+      _scale = options.scale,
       _data = options.data,
       _data_max = (function() {
         var _max = -10000;
         d3.map(_data, function(d) {
           d3.map(d, function(json) {
             if(json.value > _max) _max = json.value;
+          });
+        });
+        return _max;
+      })(),
+      _key_min = (function() {
+        var _min = 1000000000;
+        d3.map(_data, function(d) {
+          d3.map(d, function(json) {
+            if(json.key < _min) _min = json.key;
+          });
+        });
+        return _min;
+      })(),
+      _key_max = (function() {
+        var _max = -1000000000;
+        d3.map(_data, function(d) {
+          d3.map(d, function(json) {
+            if(json.key > _max) _max = json.key;
           });
         });
         return _max;
@@ -38,10 +57,9 @@ Dcharts.prototype.createLineChart = function(options) {
       _width = options.width || _w,
       _height = options.height || _h,
       _margins = options.margin || _MARGIN,
-      _x = d3.scale.linear().domain([0, _data_length]),
-      // _x = d3.scale.ordinal().domain(_data.map(function(d) {
-      //   return d.key;
-      // })).rangePoints([0, _width - _margins.left*2], 1),
+      // _x = d3.scale.linear().domain([0, _data_length]),
+      // _x = d3.scale.linear().domain([_key_min, _key_max]),
+      _x = d3.time.scale().domain([new Date(2000, 0, 1).getTime(), new Date(2022, 0, 1).getTime()]),
       _y = d3.scale.linear().domain([0, _data_max + 10]),
       _ticks = options.ticks,
       _interpolate = options.interpolate || 'cardinal',
@@ -54,6 +72,7 @@ Dcharts.prototype.createLineChart = function(options) {
       _bodyG,
       _line,
       _this = this;
+      console.log(new Date(2000, 0, 1).getTime());
 
   _selector.html('');
   _selector.on('mouseleave', function(d) {

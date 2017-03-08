@@ -17,29 +17,22 @@
       var dc1 = Dcharts('.div1');
       var dc2 = Dcharts('.div2');
       var ops1 = {
-        // scale: 'linear',
+        // scale: 'time',
         data: [
           [
-            {key: 0, value: 13},
-            {key: 1, value: 12},
-            {key: 2, value: 14},
-            {key: 3, value: 22},
-            {key: 4, value: 6}
+            {key: new Date(2001, 0, 1).getTime(), value: 0},
+            {key: new Date(2002, 0, 1).getTime(), value: 12},
+            {key: new Date(2003, 0, 1).getTime(), value: 4},
+            {key: new Date(2005, 0, 1).getTime(), value: 22},
+            {key: new Date(2008, 0, 1).getTime(), value: 6}
           ],
           [
-            {key: 0, value: 16},
-            {key: 1, value: 13},
-            {key: 2, value: 55},
-            {key: 3, value: 16},
-            {key: 4, value: 8}
-          ],
-          [
-            {key: 0, value: 22},
-            {key: 1, value: 13},
-            {key: 2, value: 30},
-            {key: 3, value: 20},
-            {key: 4, value: 10}
-          ],
+            {key: new Date(2003, 0, 1).getTime(), value: 0},
+            {key: new Date(2004, 0, 1).getTime(), value: 3},
+            {key: new Date(2005, 0, 1).getTime(), value: 55},
+            {key: new Date(2006, 0, 1).getTime(), value: 16},
+            {key: new Date(2020, 0, 1).getTime(), value: 8}
+          ]
         ],
         margin: {top: 20, right: 20, bottom: 20, left: 100},
         ticks: 5,
