@@ -14,6 +14,7 @@ gulp.task('dcct', function() {
     './src/createPieChart.js',
     './src/createLineChart.js',
     './src/tooltip.js',
+    './src/flicker.js',
     './src/end.js' // NOTE: keep this last
   ])
   .pipe(concat('dcharts.js'))

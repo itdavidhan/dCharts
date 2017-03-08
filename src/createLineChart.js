@@ -171,54 +171,19 @@ Dcharts.prototype.createLineChart = function(options) {
                   .attr("cy", function (d) { return _y(d.value); })
                   .attr("r", 4.5);
 
-          var timer = null;
           dots.on('mouseenter', function(d) {
-            flicke(this);
-            flickerBegin(this);
+            _this.flicker._flicke(this);
+            _this.flicker.flickerBegin(this);
             _this.tooltip._showTooltip(d, _selector);
           })
           .on('mousemove', function() {
             var x = d3.event.pageX;
             var y = d3.event.pageY;
             _this.tooltip._moveTooltip(_selector, x, y);
-            // flickerOver(this);
           })
           .on('mouseleave', function() {
-            flickerOver(this);
+            _this.flicker.flickerOver(this);
           });
-
-          function flickerBegin(dom) {
-            var _dom = dom;
-            clearInterval(timer);
-            timer = setInterval(function() {
-              flicke(_dom);
-            }, 1000);
-          }
-
-          function flicke(dom) {
-            d3.select(dom).transition()
-              .duration(600)
-              .style({
-                'fill-opacity': 0,
-                'r': 80
-              })
-              .transition()
-              .duration(20)
-              .style({
-                'fill-opacity': 1,
-                'r': 4.5
-              });
-          }
-
-          function flickerOver(dom) {
-            clearInterval(timer);
-            d3.select(dom).transition()
-              .duration(600)
-              .style({
-                'fill-opacity': 1,
-                'r': 4.5
-              })
-          }
       });
   }
 
