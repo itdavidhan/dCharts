@@ -6,8 +6,10 @@
 * ★ data: <array> example: [1, 4, 12] or [{'key': 'a', 'value': 1}, {'key': 'b', 'value': 2}]
 * margin: <json> example: {top: 20, right: 20, bottom: 20, left: 20}
 * ticks: <number> example: 5
-* showLineX: <boolean> example: false,
+* showLineX: <boolean> example: false
 * showLineY: <boolean> example: true
+* interpolate: <string> example: 'linear','cardinal','step'
+* tension: <number> example: 0~1之间
 * color: <array> example: ['yellow', 'red', 'orange', 'blue', 'green']
 *
 */
@@ -37,14 +39,20 @@ Dcharts.prototype.createLineChart = function(options) {
       _height = options.height || _h,
       _margins = options.margin || _MARGIN,
       _x = d3.scale.linear().domain([0, _data_length]),
+      // _x = d3.scale.ordinal().domain(_data.map(function(d) {
+      //   return d.key;
+      // })).rangePoints([0, _width - _margins.left*2], 1),
       _y = d3.scale.linear().domain([0, _data_max + 10]),
+      _ticks = options.ticks,
+      _interpolate = options.interpolate || 'cardinal',
+      _tension = options.tension || 0.7,
       _showLineX = options.showLineX || false,
       _showLineY = options.showLineY || false,
       _showDot = options.showDot,
       _color = options.color,
       _svg,
       _bodyG,
-      _line
+      _line,
       _this = this;
 
   _selector.html('');
@@ -104,7 +112,8 @@ Dcharts.prototype.createLineChart = function(options) {
   function renderYAxis(axesG){
       var yAxis = d3.svg.axis()
               .scale(_y.range([quadrantHeight(), 0]))
-              .orient("left");
+              .orient("left")
+              .ticks(_ticks);
 
       axesG.append("g")
               .attr("class", "y-axis")
@@ -158,8 +167,11 @@ Dcharts.prototype.createLineChart = function(options) {
                       .x(function (d) { return _x(d.key); })
                       .y(function (d) { return _y(d.value); });
 
+      if(_interpolate) _line.interpolate(_interpolate);
+      if(_tension) _line.tension(_tension);
+
       _bodyG.selectAll("path.line")
-                  .data(_data)
+              .data(_data)
               .enter()
               .append("path")
               .style("stroke", function (d, i) {
@@ -181,16 +193,29 @@ Dcharts.prototype.createLineChart = function(options) {
   function renderDots() {
       _data.forEach(function (list, i) {
           var dots = _bodyG.selectAll("circle._" + i)
-                      .data(list)
+                  .data(list)
                   .enter()
                   .append("circle")
                   .attr("class", "dot _" + i);
 
           _bodyG.selectAll("circle._" + i)
                   .data(list)
-                  // .style("stroke", function (d) {
-                  //     return _colors(i);
+                  // .style('stroke', function(d) {
+                  //   if(typeof _color != 'undefined' && _color.length > 0)
+                  //   {
+                  //     return _color[i];
+                  //   }else{
+                  //     return _COLOR(i);
+                  //   }
                   // })
+                  .style("fill", function (d) {
+                      if(typeof _color != 'undefined' && _color.length > 0)
+                      {
+                        return _color[i];
+                      }else{
+                        return _COLOR(i);
+                      }
+                  })
                   .transition()
                   .attr("cx", function (d) { return _x(d.key); })
                   .attr("cy", function (d) { return _y(d.value); })

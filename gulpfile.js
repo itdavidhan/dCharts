@@ -1,9 +1,6 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 
-gulp.task('default', function() {
-  // 将你的默认的任务代码放在这
-});
 
 // 合并dcharts.js: gulp dcct
 gulp.task('dcct', function() {
@@ -20,3 +17,10 @@ gulp.task('dcct', function() {
   .pipe(concat('dcharts.js'))
   .pipe(gulp.dest('./lib'));
 });
+
+// 监控
+gulp.task('watch', function() {
+    gulp.watch('./src/*.js', ['dcct']);
+});
+
+gulp.task('default', ['dcct', 'watch']);
