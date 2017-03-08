@@ -1,5 +1,14 @@
 /*
 * 创建柱状图 - bar chart
+* @param: {Object} options
+* 参数配置（带★为必选）
+* ★ scale: <string> example: 'linear' or 'ordinal'
+* ★ data: <array> example: [1, 4, 12] or [{'key': 'a', 'value': 1}, {'key': 'b', 'value': 2}]
+* margin: <json> example: {top: 20, right: 20, bottom: 20, left: 20}
+* ticks: <number> example: 5
+* showLineX: <boolean> example: false,
+* showLineY: <boolean> example: true
+* color: <array> example: ['yellow', 'red', 'orange', 'blue', 'green']
 *
 */
 Dcharts.prototype.createBarChart = function(options) {

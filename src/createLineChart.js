@@ -1,7 +1,17 @@
 /*
 * 创建线图 - line chart
+* @param: {Object} options
+* 参数配置（带★为必选）
+* ★ scale: <string> example: 'linear' or 'ordinal'
+* ★ data: <array> example: [1, 4, 12] or [{'key': 'a', 'value': 1}, {'key': 'b', 'value': 2}]
+* margin: <json> example: {top: 20, right: 20, bottom: 20, left: 20}
+* ticks: <number> example: 5
+* showLineX: <boolean> example: false,
+* showLineY: <boolean> example: true
+* color: <array> example: ['yellow', 'red', 'orange', 'blue', 'green']
 *
 */
+
 Dcharts.prototype.createLineChart = function(options) {
   var _selector = this.selector,
       _w = parseFloat(_selector.style('width')),
@@ -28,7 +38,10 @@ Dcharts.prototype.createLineChart = function(options) {
       _margins = options.margin || _MARGIN,
       _x = d3.scale.linear().domain([0, _data_length]),
       _y = d3.scale.linear().domain([0, _data_max + 10]),
-      _colors = d3.scale.category10(),
+      _showLineX = options.showLineX || false,
+      _showLineY = options.showLineY || false,
+      _showDot = options.showDot,
+      _color = options.color,
       _svg,
       _bodyG,
       _line
@@ -76,13 +89,16 @@ Dcharts.prototype.createLineChart = function(options) {
               })
               .call(xAxis);
 
-      axesG.selectAll("g.x-axis g.tick")
-          .append("line")
-              .classed("grid-line", true)
-              .attr("x1", 0)
-              .attr("y1", 0)
-              .attr("x2", 0)
-              .attr("y2", - quadrantHeight());
+      if(_showLineX) showLineX();
+      function showLineX() {
+        axesG.selectAll("g.x-axis g.tick")
+            .append("line")
+                .classed("grid-line", true)
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", 0)
+                .attr("y2", - quadrantHeight());
+      }
   }
 
   function renderYAxis(axesG){
@@ -97,16 +113,19 @@ Dcharts.prototype.createLineChart = function(options) {
               })
               .call(yAxis);
 
-       axesG.selectAll("g.y-axis g.tick")
-          .append("line")
-              .classed("grid-line", true)
-              .attr("x1", 0)
-              .attr("y1", 0)
-              .attr("x2", quadrantWidth())
-              .attr("y2", 0);
+       if(_showLineY) showLineY();
+       function showLineY() {
+         axesG.selectAll("g.y-axis g.tick")
+            .append("line")
+                .classed("grid-line", true)
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", quadrantWidth())
+                .attr("y2", 0);
+       }
   }
 
-  function defineBodyClip(svg) { // <-2C
+  function defineBodyClip(svg) {
       var padding = 5;
 
       svg.append("defs")
@@ -130,7 +149,8 @@ Dcharts.prototype.createLineChart = function(options) {
 
       renderLines();
 
-      renderDots();
+      // 是否显示圆点
+      if(_showDot) renderDots();
   }
 
   function renderLines() {
@@ -143,7 +163,12 @@ Dcharts.prototype.createLineChart = function(options) {
               .enter()
               .append("path")
               .style("stroke", function (d, i) {
-                  return _colors(i);
+                if(typeof _color != 'undefined' && _color.length > 0)
+                {
+                  return _color[i];
+                }else{
+                  return _COLOR(i);
+                }
               })
               .attr("class", "line");
 
